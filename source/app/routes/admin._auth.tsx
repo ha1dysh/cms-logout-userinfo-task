@@ -1,4 +1,3 @@
-import React from 'react';
 import {Layout, Page} from '@shopify/polaris';
 import {Outlet} from '@remix-run/react';
 

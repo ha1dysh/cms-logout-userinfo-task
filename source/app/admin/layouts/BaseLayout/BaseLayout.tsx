@@ -2,8 +2,10 @@ import {Frame} from '@shopify/polaris';
 import {FC, PropsWithChildren, useCallback, useState} from 'react';
 import {BaseNav} from '~/admin/navigations/BaseNav/BaseNav';
 import {AppBar} from '~/admin/components/AppBar/AppBar';
+import { User } from '@prisma/client';
 
-export const BaseLayout: FC<PropsWithChildren> = ({children}) => {
+
+export const BaseLayout: FC<PropsWithChildren & {user: User}> = ({children, user}) => {
   const [mobileNavigationActive, setMobileNavigationActive] = useState(false);
 
   const logo = {
@@ -26,7 +28,7 @@ export const BaseLayout: FC<PropsWithChildren> = ({children}) => {
   return (
     <Frame
       logo={logo}
-      topBar={<AppBar onNavigationToggle={toggleMobileNavigationActive}/>}
+      topBar={<AppBar onNavigationToggle={toggleMobileNavigationActive} user={user} />}
       navigation={<BaseNav/>}
       showMobileNavigation={mobileNavigationActive}
       onNavigationDismiss={toggleMobileNavigationActive}
@@ -35,6 +37,3 @@ export const BaseLayout: FC<PropsWithChildren> = ({children}) => {
     </Frame>
   );
 };
-
-
-

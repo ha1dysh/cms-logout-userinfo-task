@@ -1,5 +1,5 @@
 import {Badge, Card, IndexTable, LegacyCard, Link, Text, useIndexResourceState,} from '@shopify/polaris';
-import React, {FC, useMemo} from 'react';
+import {FC, useMemo} from 'react';
 import {TUserDto} from '~/.server/admin/dto/user.dto';
 import type {NonEmptyArray} from '@shopify/polaris/build/ts/src/types';
 import {IndexTableHeading} from '@shopify/polaris/build/ts/src/components/IndexTable/IndexTable';
@@ -22,25 +22,20 @@ export const AdminUsersTable: FC<{ users: TUserDto[] }> = ({users}) => {
   ]), []);
 
   const rowMarkup = users.map(
-    (
-      {id, email, role, fullName, createdAt, updatedAt, deletedAt},
-      index,
-    ) => (
-      <IndexTable.Row
-        id={id}
-        key={id}
-        position={index}
-      >
+    ({ id, email, role, fullName, createdAt, updatedAt, deletedAt }, index) => (
+      <IndexTable.Row id={id} key={id} position={index}>
         <IndexTable.Cell>
           <Link url={`${EAdminNavigation.users}/${id}`}>{email}</Link>
         </IndexTable.Cell>
         <IndexTable.Cell>{fullName}</IndexTable.Cell>
-        <IndexTable.Cell><Badge>{role}</Badge></IndexTable.Cell>
+        <IndexTable.Cell>
+          <Badge tone={role === 'ADMIN' ? 'info-strong' : 'info'}>{role}</Badge>
+        </IndexTable.Cell>
         <IndexTable.Cell>{createdAt}</IndexTable.Cell>
         <IndexTable.Cell>{updatedAt}</IndexTable.Cell>
         <IndexTable.Cell>{deletedAt}</IndexTable.Cell>
       </IndexTable.Row>
-    ),
+    )
   );
 
   return (

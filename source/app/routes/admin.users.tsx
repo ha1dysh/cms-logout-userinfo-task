@@ -1,11 +1,14 @@
-import React from 'react';
 import {BaseLayout} from '~/admin/layouts/BaseLayout/BaseLayout';
-import {Outlet} from '@remix-run/react';
+import {Outlet, useLoaderData} from '@remix-run/react';
+import { adminDashboardLoader } from '~/.server/admin/loaders/dashboard.loader';
 
+export const loader = adminDashboardLoader
 
 export default function AdminUsers() {
+  const data = useLoaderData<typeof loader>();
+
   return (
-    <BaseLayout>
+    <BaseLayout user={data?.user}>
       <Outlet/>
     </BaseLayout>
   );
