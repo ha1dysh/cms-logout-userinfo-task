@@ -1,41 +1,30 @@
-import { User } from '@prisma/client';
-import { useFetcher } from '@remix-run/react';
-import {TopBar, TopBarProps} from '@shopify/polaris';
-import {FC, useCallback, useState} from 'react';
+import { TopBar, TopBarProps } from "@shopify/polaris";
+import { FC, useCallback, useState } from "react";
+import { TUserDto } from "~/.server/admin/dto/user.dto";
+import { UserMenu } from '~/admin/components/AppBar/UserMenu';
 
 export interface AppBarProps {
-  onNavigationToggle: TopBarProps['onNavigationToggle'];
+  onNavigationToggle: TopBarProps["onNavigationToggle"];
+  user: TUserDto;
 }
 
-export const AppBar: FC<AppBarProps & {user: User}> = ({onNavigationToggle, user}) => {
+export const AppBar: FC<AppBarProps> = ({ onNavigationToggle, user }) => {
   const [userMenuActive, setUserMenuActive] = useState(false);
-  const fetcher = useFetcher()
 
-  const toggleUserMenuActive = useCallback(() => {
-    setUserMenuActive((userMenuActive) => !userMenuActive);
-  }, []);
-
-  const userMenuActions = [
-    { items: [{ content: 'Log out', onAction: () => {
-      fetcher.submit(null, { method: 'POST', action: '/admin/dashboard' });
-    } }] },
-  ];
-
-  const userMenuMarkup = (
-    <TopBar.UserMenu
-      actions={userMenuActions}
-      name={user.fullName || 'Empty name'}
-      detail={'storeName'}
-      initials="D"
-      open={userMenuActive}
-      onToggle={toggleUserMenuActive}
-    />
+  const toggleUserMenuActive = useCallback(
+    () => setUserMenuActive((userMenuActive) => !userMenuActive),
+    []
   );
+  const userMenuActions = [
+    {
+      items: [{ content: "Community forums" }],
+    },
+  ];
 
   return (
     <TopBar
       showNavigationToggle
-      userMenu={userMenuMarkup}
+      userMenu={<UserMenu user={user} userMenuActive={userMenuActive} toggleUserMenuActive={toggleUserMenuActive}/>}
       onNavigationToggle={onNavigationToggle}
     />
   );

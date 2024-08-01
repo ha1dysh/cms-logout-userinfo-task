@@ -1,119 +1,30 @@
-import { json, useLoaderData } from "@remix-run/react";
-import {
-  BlockStack,
-  Box,
-  Button,
-  Card,
-  Form,
-  Layout,
-  Page,
-  Text,
-  TextField,
-} from "@shopify/polaris";
+import { useLoaderData } from "@remix-run/react";
+import { Page } from "@shopify/polaris";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
-import { prisma } from "~/.server/shared/utils/prisma.util";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { UsersSingle } from "~/admin/components/UserSingle/UserSingle";
+import { adminUsersSingleLoader } from "~/.server/admin/loaders/users.single.loader";
+import { adminUsersRoleAction } from "~/.server/admin/actions/users.role.action";
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const id = Number(params.id);
-  const user = await prisma.user.findUnique({ where: { id } });
-  return json({ user });
-}
+export const loader = adminUsersSingleLoader;
 
-export default function AdminUsersNew() {
+export const action = adminUsersRoleAction;
+
+export default function AdminUsersSingle() {
   const { user } = useLoaderData<typeof loader>();
 
   return (
     <Page
-      title="Users"
-      backAction={{
-        url: EAdminNavigation.users,
-      }}
-      actionGroups={[
+      title={user.fullName || ""}
+      backAction={{ url: EAdminNavigation.users }}
+      secondaryActions={[
         {
-          title: "Copy",
-          onClick: (openActions) => {
-            alert("Copy action");
-            openActions();
-          },
-          actions: [{ content: "Copy to clipboard" }],
-        },
-        {
-          title: "Promote",
-          disabled: true,
-          actions: [{ content: "Share on Facebook" }],
-        },
-        {
-          title: "More actions",
-          actions: [
-            { content: "Duplicate" },
-            { content: "Print" },
-            { content: "Unarchive" },
-            { content: "Cancel order" },
-          ],
+          content: "Security",
+          accessibilityLabel: "Security",
+          url: `${EAdminNavigation.users}/${user.id}/security`,
         },
       ]}
     >
-      <Layout>
-        <Layout.Section>
-          <Card roundedAbove="sm">
-            <Text as="h1" variant="headingLg" fontWeight="bold">
-              User info:
-            </Text>
-            <Box paddingBlock="200">
-              <BlockStack gap="200">
-                <Text as="h3" variant="headingSm" fontWeight="medium">
-                  Full name
-                </Text>
-                <Text as="p" variant="bodyMd">
-                  {user?.fullName}
-                </Text>
-              </BlockStack>
-            </Box>
-            <Box paddingBlockStart="200">
-              <BlockStack gap="200">
-                <Text as="h3" variant="headingSm" fontWeight="medium">
-                  Email
-                </Text>
-                <Text as="p" variant="bodyMd">
-                  {user?.email}
-                </Text>
-              </BlockStack>
-            </Box>
-          </Card>
-        </Layout.Section>
-        <Layout.Section variant="oneThird">
-          <Card roundedAbove="sm">
-            <Text as="h1" variant="headingSm" fontWeight="bold">
-              User role
-            </Text>
-            <Text as="h3" variant="headingSm" fontWeight="medium">
-              {user?.role}
-            </Text>
-          </Card>
-
-          <Card roundedAbove="sm">
-            <Text as="h1" variant="headingSm" fontWeight="bold">
-              Security
-            </Text>
-            <Form onSubmit={() => {}}>
-              <TextField
-                label="change password"
-                // value={value}
-                // onChange={handleChange}
-                autoComplete="off"
-              />
-              <TextField
-                label="confirm password"
-                // value={value}
-                // onChange={handleChange}
-                autoComplete="off"
-              />
-              <Button>Submit</Button>
-            </Form>
-          </Card>
-        </Layout.Section>
-      </Layout>
+      <UsersSingle user={user} />
     </Page>
   );
 }

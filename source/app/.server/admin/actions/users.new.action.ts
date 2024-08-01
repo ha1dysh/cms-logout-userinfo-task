@@ -6,6 +6,7 @@ import {usersNewFormValidator} from '~/admin/components/UsersNewForm/UsersNewFor
 import {prisma} from '~/.server/shared/utils/prisma.util';
 import {$Enums} from '@prisma/client';
 import { hashPassword } from '~/.server/shared/utils/auth.util';
+import { joinFirstName } from '../utils/user.util';
 
 export async function adminUsersNewAction({request}: ActionFunctionArgs) {
   await authenticator.isAuthenticated(request, {
@@ -38,7 +39,7 @@ export async function adminUsersNewAction({request}: ActionFunctionArgs) {
     data: {
       email,
       password: await hashPassword(password),
-      fullName: `${firstName} ${lastName}`,
+      fullName: joinFirstName(firstName, lastName),
       role: role as $Enums.AdminRole
     }
   });

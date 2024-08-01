@@ -1,17 +1,13 @@
 import { BaseLayout } from "~/admin/layouts/BaseLayout/BaseLayout";
-import { Outlet, useLoaderData } from "@remix-run/react";
-import { adminDashboardLoader } from "~/.server/admin/loaders/dashboard.loader";
-import { ActionFunctionArgs } from "@remix-run/node";
-import { authenticator } from "~/.server/admin/services/auth.service";
-
-export const loader = adminDashboardLoader;
-
-export async function action({ request }: ActionFunctionArgs) {
-  await authenticator.logout(request, { redirectTo: "/admin/auth/login" });
-};
+import { Outlet, useRouteLoaderData } from "@remix-run/react";
+import { adminLoader } from "~/.server/admin/loaders/admin.loader";
 
 export default function AdminDashboard() {
-  const data = useLoaderData<typeof loader>();
+  const data = useRouteLoaderData<typeof adminLoader>("routes/admin");
+
+  if (!data?.user) {
+    return null;
+  }
 
   return (
     <BaseLayout user={data.user}>
