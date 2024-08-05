@@ -3,7 +3,7 @@ import { authenticator } from "~/.server/admin/services/auth.service";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 import { validationError } from "remix-validated-form";
 import { prisma } from "~/.server/shared/utils/prisma.util";
-import { joinFirstName } from "~/.server/admin/utils/user.util";
+import { joinFirstName } from "~/admin/utils/user.util";
 import { usersPrimaryInfoFormValidator } from "~/admin/components/UsersPrimaryInfoForm/UsersPrimaryInfoForm.validator";
 
 export async function adminUsersPrimaryAction({

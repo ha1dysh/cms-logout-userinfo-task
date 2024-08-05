@@ -6,7 +6,7 @@ import {usersNewFormValidator} from '~/admin/components/UsersNewForm/UsersNewFor
 import {prisma} from '~/.server/shared/utils/prisma.util';
 import {$Enums} from '@prisma/client';
 import { hashPassword } from '~/.server/shared/utils/auth.util';
-import { joinFirstName } from '../utils/user.util';
+import { joinFirstName } from '~/admin/utils/user.util';
 
 export async function adminUsersNewAction({request}: ActionFunctionArgs) {
   await authenticator.isAuthenticated(request, {

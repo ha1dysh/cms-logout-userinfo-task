@@ -3,14 +3,40 @@ import { prisma } from "~/.server/shared/utils/prisma.util";
 import { userMapper } from "~/.server/admin/mappers/user.mapper";
 import { withZod } from "@rvf/zod";
 import { z } from "zod";
-import { $Enums } from "@prisma/client";
+import { $Enums, Prisma } from "@prisma/client";
+import type { SerializeFrom } from "@remix-run/server-runtime";
+import { IOffsetPaginationInfoDto } from "~/.server/shared/dto/offset-pagination-info.dto";
 
-//http://localhost:3000/admin/users?take=1&skip=0&q=ecomcms&role=ADMIN,STUFF&accountStatus=active
+type UserOrderByWithRelationInput = Prisma.UserOrderByWithRelationInput;
 
 export enum EAccountStatus {
   active = "active",
   disabled = "disabled",
 }
+
+export enum EUsersSortVariant {
+  id_asc = "id_asc",
+  id_desc = "id_desc",
+  fullName_asc = "fullName_asc",
+  fullName_desc = "fullName_desc",
+  email_asc = "email_asc",
+  email_desc = "email_desc",
+  role_asc = "role_asc",
+  role_desc = "role_desc",
+  createdAt_asc = "createdAt_asc",
+  createdAt_desc = "createdAt_desc",
+  updatedAt_asc = "updatedAt_asc",
+  updatedAt_desc = "updatedAt_desc",
+  deletedAt_asc = "deletedAt_asc",
+  deletedAt_desc = "deletedAt_desc",
+}
+
+export const sortValueToField = <O extends object>(value: string) => {
+  const [field, order] = value.split("_");
+  return {
+    [field]: order,
+  } as O;
+};
 
 export const userQueryValidator = withZod(
   z.object({
@@ -24,24 +50,20 @@ export const userQueryValidator = withZod(
       )
       .optional(),
     accountStatus: z.nativeEnum(EAccountStatus).optional(),
-    sortProp: z.string().optional(),
-    sortType: z.string().optional()
+    sort: z.nativeEnum(EUsersSortVariant).optional(),
   })
 );
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function adminUsersLoader({ request }: LoaderFunctionArgs) {
   const { searchParams } = new URL(request.url);
-
   const { data } = await userQueryValidator.validate(searchParams);
-  console.log(data);
 
-  let take = 15;
+  let take = 10;
   let skip = 0;
   let searchQuery;
   let filterRoleQuery;
   let filterAccountStatusQuery;
-  let orderBy
+  let orderBy: UserOrderByWithRelationInput = { id: "desc" as const };
 
   if (data?.take) {
     take = data.take;
@@ -82,11 +104,18 @@ export async function adminUsersLoader({ request }: LoaderFunctionArgs) {
     };
   }
 
-  if (data?.sortProp && data?.sortType) {
-    orderBy = {
-      [data.sortProp]: data.sortType
-    }
+  if (data?.sort) {
+    orderBy = sortValueToField<UserOrderByWithRelationInput>(data.sort);
   }
+
+  const pagination: IOffsetPaginationInfoDto = {
+    take,
+    skip,
+    hasNext: false,
+    hasPrevious: skip > 0,
+    total: 0,
+    count: 0,
+  };
 
   const users = await prisma.user.findMany({
     take,
@@ -96,8 +125,21 @@ export async function adminUsersLoader({ request }: LoaderFunctionArgs) {
       ...filterRoleQuery,
       ...filterAccountStatusQuery,
     },
-    orderBy
+    orderBy,
   });
 
-  return json({ users: users.map(userMapper) });
+  pagination.count = users.length;
+  pagination.total = await prisma.user.count({
+    where: {
+      ...searchQuery,
+      ...filterRoleQuery,
+      ...filterAccountStatusQuery,
+    },
+  });
+
+  pagination.hasNext = skip + take < pagination.total;
+
+  return json({ users: users.map(userMapper), query: data, pagination });
 }
+
+export type TAdminUsersLoaderData = SerializeFrom<typeof adminUsersLoader>;

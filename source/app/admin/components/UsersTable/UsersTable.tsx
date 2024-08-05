@@ -1,27 +1,49 @@
 import { Card, IndexTable, Link } from "@shopify/polaris";
 import { FC, useMemo } from "react";
-import { TUserDto } from "~/.server/admin/dto/user.dto";
+import type { TUserDto } from "~/.server/admin/dto/user.dto";
 import type { NonEmptyArray } from "@shopify/polaris/build/ts/src/types";
 import { IndexTableHeading } from "@shopify/polaris/build/ts/src/components/IndexTable/IndexTable";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 import { UserRoleBadge } from "~/admin/components/UsersTable/UserRoleBadge";
+import type { TAdminUsersLoaderData } from "~/.server/admin/loaders/users.loader";
+import { AdminUsersTableFilters } from "~/admin/components/UsersTable/UsersTableFilters";
+import { IOffsetPaginationInfoDto } from "~/.server/shared/dto/offset-pagination-info.dto";
+import { usePagination } from "~/admin/hooks/usePagination";
 
-export const AdminUsersTable: FC<{ users: TUserDto[] }> = ({ users }) => {
-  const resourceName = useMemo(() => ({
-    singular: "user",
-    plural: "users",
-  }),[]);
+export interface UsersTableProps {
+  users: TUserDto[];
+  query?: TAdminUsersLoaderData["query"];
+  pagination: IOffsetPaginationInfoDto;
+}
 
-  const headings: NonEmptyArray<IndexTableHeading> = useMemo(() => [
-    { title: "Email" },
-    { title: "Full Name" },
-    { title: "Role" },
-    { title: "Created at" },
-    { title: "Updated at" },
-    { title: "Deleted at" },
-  ], []);
+export const AdminUsersTable: FC<UsersTableProps> = ({
+  users,
+  query,
+  pagination,
+}) => {
+  const paginationProps = usePagination(pagination);
+  const resourceName = useMemo(
+    () => ({
+      singular: "user",
+      plural: "users",
+    }),
+    []
+  );
 
-  const rowMarkup = users.map(({ id, email, role, fullName, createdAt, updatedAt, deletedAt }, index) => (
+  const headings: NonEmptyArray<IndexTableHeading> = useMemo(
+    () => [
+      { title: "Email" },
+      { title: "Full Name" },
+      { title: "Role" },
+      { title: "Created at" },
+      { title: "Updated at" },
+      { title: "Deleted at" },
+    ],
+    []
+  );
+
+  const rowMarkup = users.map(
+    ({ id, email, role, fullName, createdAt, updatedAt, deletedAt }, index) => (
       <IndexTable.Row id={id} key={id} position={index}>
         <IndexTable.Cell>
           <Link url={`${EAdminNavigation.users}/${id}`}>{email}</Link>
@@ -39,11 +61,13 @@ export const AdminUsersTable: FC<{ users: TUserDto[] }> = ({ users }) => {
 
   return (
     <Card padding="0">
+      <AdminUsersTableFilters query={query} />
       <IndexTable
         resourceName={resourceName}
         itemCount={users.length}
         selectable={false}
         headings={headings}
+        pagination={paginationProps}
       >
         {rowMarkup}
       </IndexTable>
