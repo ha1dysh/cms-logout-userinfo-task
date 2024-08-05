@@ -34,12 +34,12 @@ function NavItem({ linkItem }: { linkItem: LinkItem }) {
   const { pathname } = useLocation();
   const isActive = pathname === linkItem.url
     ? "Polaris-Navigation__ItemInnerWrapper--selected"
-    : "Polaris-Navigation__ItemInnerWrapper";
+    : "";
 
   return (
     <li className="Polaris-Navigation__ListItem">
       <div className="Polaris-Navigation__ItemWrapper">
-        <div className={isActive}>
+        <div className={`Polaris-Navigation__ItemInnerWrapper ${isActive}`}>
           <linkItem.icon className="Polaris-Navigation__Icon" />
           <NavLink
             to={linkItem.url}
