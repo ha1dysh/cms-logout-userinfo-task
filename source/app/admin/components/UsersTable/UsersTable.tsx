@@ -44,7 +44,7 @@ export const AdminUsersTable: FC<UsersTableProps> = ({
 
   const rowMarkup = users.map(
     ({ id, email, role, fullName, createdAt, updatedAt, deletedAt }, index) => (
-      <IndexTable.Row id={id} key={id} position={index}>
+      <IndexTable.Row id={id} key={id} position={index} disabled={deletedAt !== null}>
         <IndexTable.Cell>
           <Link url={`${EAdminNavigation.users}/${id}`}>{email}</Link>
         </IndexTable.Cell>
