@@ -75,6 +75,7 @@ export function RoleCard({ user: { role } }: RoleCardProps) {
         >
           <Modal.Section>
             <FormLayout>
+              <input type="hidden" name="actionType" value="changeRole" />
               <ValidatedSelect
                 label={null}
                 name="role"

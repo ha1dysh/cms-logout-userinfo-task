@@ -12,7 +12,7 @@ export const ADMIN_AUTH_STRATEGY = 'admin-pass';
 export const authenticator = new Authenticator<User>(sessionStorage);
 
 const findUser = async (email: string, password: string): Promise<User> => {
-  const user = await prisma.user.findUnique({where: {email: email}});
+  const user = await prisma.user.findUnique({where: {email: email, deletedAt: null}});
 
   if (!user) {
     throw new ValidatorErrorWrapper({
