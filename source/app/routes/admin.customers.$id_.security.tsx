@@ -5,15 +5,16 @@ import { Page } from "@shopify/polaris";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 import { ValidatedSubmitButton } from "~/admin/ui/ValidatedSubmitButton/ValidatedSubmitButton";
 import { ValidatedForm } from "remix-validated-form";
-import { UsersSecurityForm } from "~/admin/components/UsersSecurityForm/UsersSecurityForm";
-import { usersSecurityFormValidator } from "~/admin/components/UsersSecurityForm/UsersSecurityForm.validator";
 import { adminCustomersSecurityAction } from "~/.server/admin/actions/customers.security.action";
+import { customersSecurityFormValidator } from "~/admin/components/CustomersSecurityForm/CustomersSecurityForm.validator";
+import { CustomersSecurityForm } from "~/admin/components/CustomersSecurityForm/CustomersSecurityForm";
+import { adminCustomersSingleLoader } from "~/.server/admin/loaders/customers.single.loader";
 
-export const loader = adminDashboardLoader;
+export const loader = adminCustomersSingleLoader;
 export const action = adminCustomersSecurityAction;
 
 export default function AdminUsersIdSecurity() {
-  const { user } = useLoaderData<typeof loader>();
+  const { customer } = useLoaderData<typeof loader>();
 
   const primaryAction = useCallback(
     () => <ValidatedSubmitButton text="save" variant="primary" />,
@@ -21,15 +22,15 @@ export default function AdminUsersIdSecurity() {
   );
 
   return (
-    <ValidatedForm validator={usersSecurityFormValidator} method="post">
+    <ValidatedForm validator={customersSecurityFormValidator} method="post">
       <Page
-        title={`Edit Security: ${user.fullName}`}
+        title={`Edit Security: ${customer.firstName} ${customer.lastName}`}
         backAction={{
-          url: `${EAdminNavigation.users}/${user.id}`,
+          url: `${EAdminNavigation.customers}/${customer.id}`,
         }}
         primaryAction={primaryAction()}
       >
-        <UsersSecurityForm />
+        <CustomersSecurityForm />
       </Page>
     </ValidatedForm>
   );

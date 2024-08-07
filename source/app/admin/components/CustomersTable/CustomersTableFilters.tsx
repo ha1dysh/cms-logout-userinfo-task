@@ -156,7 +156,7 @@ export const AdminCustomersTableFilters: FC<CustomersTableFiltersProps> = ({
       sortOptions={sortOptions}
       sortSelected={sortSelected}
       queryValue={queryValue}
-      queryPlaceholder="Search users"
+      queryPlaceholder="Search customers"
       onQueryChange={handleFiltersQueryChange}
       onQueryClear={() => handleFiltersQueryChange("")}
       onSort={setSortSelected}

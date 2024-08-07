@@ -1,7 +1,7 @@
 import { BlockStack, Card, FormLayout, Text } from "@shopify/polaris";
 import { ValidatedTextField } from "~/admin/ui/ValidatedTextField/ValidatedTextField";
 
-export function UsersSecurityForm() {
+export function CustomersSecurityForm() {
   return (
     <Card>
       <BlockStack gap="200">
