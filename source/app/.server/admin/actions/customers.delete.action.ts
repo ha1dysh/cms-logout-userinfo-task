@@ -1,11 +1,12 @@
 import { Customer } from "@prisma/client";
-import { json, redirect } from "@remix-run/react";
+import { redirect } from "@remix-run/react";
+import { validationError } from "remix-validated-form";
 import { prisma } from "~/.server/shared/utils/prisma.util";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 
 export async function adminCustomersDeleteAction(customer: Customer) {
   if (customer.deletedAt) {
-    return json({ error: { message: "Customer already deleted" } });
+    return validationError({ fieldErrors: { error: 'Customer already deleted' } });
   }
 
   await prisma.customer.update({

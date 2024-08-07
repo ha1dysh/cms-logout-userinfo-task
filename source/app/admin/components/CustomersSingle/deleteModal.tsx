@@ -6,22 +6,22 @@ import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 import { ValidatedErrorBanner } from "~/admin/ui/ValidatedErrorBanner/ValidatedErrorBanner";
 import { ValidatedSubmitButton } from "~/admin/ui/ValidatedSubmitButton/ValidatedSubmitButton";
 
-type UsersDeleteModalProps = {
+type CustomerDeleteModalProps = {
   id: string;
   modalActive: boolean;
   setModalActive: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-export function UsersDeleteModal({id, modalActive, setModalActive}: UsersDeleteModalProps) {
+export function CustomerDeleteModal({id, modalActive, setModalActive}: CustomerDeleteModalProps) {
   return (
     <Modal
       open={modalActive}
       onClose={() => setModalActive((s) => !s)}
-      title="You sure you want to delete this user?"
+      title="You sure you want to delete this customer?"
     >
       <Modal.Section>
         <ValidatedForm
-          action={`${EAdminNavigation.users}/${id}`}
+          action={`${EAdminNavigation.customers}/${id}`}
           method="post"
           validator={withZod(z.object({}))}
         >

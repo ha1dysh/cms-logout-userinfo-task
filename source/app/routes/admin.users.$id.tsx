@@ -33,7 +33,7 @@ export default function AdminUsersSingle() {
       ]}
     >
       <UsersSingle user={user} />
-      <UsersDeleteModal modalActive={modalActive} setModalActive={setModalActive} />
+      <UsersDeleteModal id={user.id} modalActive={modalActive} setModalActive={setModalActive} />
     </Page>
   );
 }

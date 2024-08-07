@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { authenticator } from "~/.server/admin/services/auth.service";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 import { prisma } from "~/.server/shared/utils/prisma.util";
@@ -28,7 +28,7 @@ export async function adminCustomersMainAction({ request, params }: ActionFuncti
 
   switch (actionType) {
     case 'updateAddress':
-      return json({error: { message: 'TODO: update address'}})
+      return // TODO: crud address
     case 'delete':
       return adminCustomersDeleteAction(customer)
     default:
