@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import { useLoaderData } from "@remix-run/react";
-import { adminDashboardLoader } from "~/.server/admin/loaders/dashboard.loader";
 import { Page } from "@shopify/polaris";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 import { ValidatedSubmitButton } from "~/admin/ui/ValidatedSubmitButton/ValidatedSubmitButton";

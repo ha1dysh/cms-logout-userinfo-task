@@ -34,7 +34,7 @@ export function CustomerDeleteModal({id, modalActive, setModalActive}: CustomerD
             >
               No
             </Button>
-            <ValidatedSubmitButton text="Yes" />
+            <ValidatedSubmitButton text="Delete" />
           </InlineStack>
         </ValidatedForm>
       </Modal.Section>

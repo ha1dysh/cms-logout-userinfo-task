@@ -1,5 +1,5 @@
-import { useActionData, useLoaderData } from "@remix-run/react";
-import {  Page } from "@shopify/polaris";
+import { useLoaderData } from "@remix-run/react";
+import { Page } from "@shopify/polaris";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 import { useState } from "react";
 import { adminCustomersSingleLoader } from "~/.server/admin/loaders/customers.single.loader";

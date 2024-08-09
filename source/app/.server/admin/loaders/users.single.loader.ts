@@ -17,12 +17,10 @@ export async function adminUsersSingleLoader({
     return redirect(EAdminNavigation.users);
   }
 
-  // get user
   const user = await prisma.user.findFirst({
     where: { id: Number(id) },
   });
 
-  // if not exist
   if (!user) {
     return redirect(EAdminNavigation.users);
   }

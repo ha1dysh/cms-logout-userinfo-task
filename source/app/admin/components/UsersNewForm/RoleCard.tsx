@@ -1,5 +1,5 @@
 import {BlockStack, Card, FormLayout, SelectProps, Text} from '@shopify/polaris';
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import {ValidatedSelect} from '~/admin/ui/ValidatedSelect/ValidatedSelect';
 import {$Enums} from '@prisma/client';
 

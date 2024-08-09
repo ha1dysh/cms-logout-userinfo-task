@@ -24,7 +24,7 @@ export function PrimaryInfoCard({ user }: PrimaryInfoCardProps) {
         </InlineGrid>
         <BlockStack gap="200">
           <Text as="h3" variant="headingXs" fontWeight="medium">
-            Full Name
+            Title
           </Text>
           <Text as="p" variant="bodyMd">
             {user.fullName}
@@ -32,7 +32,7 @@ export function PrimaryInfoCard({ user }: PrimaryInfoCardProps) {
         </BlockStack>
         <BlockStack gap="200">
           <Text as="h3" variant="headingXs" fontWeight="medium">
-            Email
+            Description
           </Text>
           <Text as="p" variant="bodyMd">
             {user.email}

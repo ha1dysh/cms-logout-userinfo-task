@@ -1,18 +1,15 @@
-import { LinkProps } from "@remix-run/react"
 import { Frame } from "@shopify/polaris";
-import { FC, PropsWithChildren, useCallback, useState } from "react";
-import { HomeIcon, OrderIcon, PersonIcon, ProductIcon, WorkIcon } from "@shopify/polaris-icons";
+import { FC, PropsWithChildren, useCallback, useState, } from "react";
+import { HomeIcon, OrderIcon, PersonIcon, ProductIcon, WorkIcon, CategoriesIcon } from "@shopify/polaris-icons";
 import { AppBar } from "~/admin/components/AppBar/AppBar";
 import { TUserDto } from "~/.server/admin/dto/user.dto";
 import { EAdminNavigation } from "~/admin/constants/navigation.constant";
 import { Navigation } from "~/admin/navigations/BaseNav/Navigation";
 import { NavigationSection } from "~/admin/navigations/BaseNav/NavigationSection";
+import { LinkItem } from "~/admin/navigations/BaseNav/NavigationItem";
 
 
-export interface LinkItem extends LinkProps {
-  label: string
-  icon: React.FC<React.SVGProps<SVGSVGElement>>
-}
+
 
 export type BaseLayoutProps = PropsWithChildren<{
   user: TUserDto;
@@ -41,7 +38,12 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ children, user }) => {
     { label: "Home", to: EAdminNavigation.dashboard, icon: HomeIcon },
     { label: "Users", to: EAdminNavigation.users, icon: PersonIcon },
     { label: "Customers", to: EAdminNavigation.customers, icon: WorkIcon },
-    { label: "Products", to: EAdminNavigation.products, icon: ProductIcon },
+    {
+      label: "Products",
+      to: EAdminNavigation.products,
+      icon: ProductIcon,
+      subLinks: [{ label: "Category", to: EAdminNavigation.categories, icon: CategoriesIcon }],
+    },
     { label: "Orders", to: EAdminNavigation.orders, icon: OrderIcon },
   ];
 

@@ -17,7 +17,9 @@ export function CustomersSingle({ customer }: CustomersSingleProps) {
       </Layout.Section>
 
       <Layout.Section variant="oneThird">
-        <AddressCard customer={customer} />
+        {customer?.customerAddress?.map((address) => (
+          <AddressCard key={address.id} customerAddress={address} />
+        ))}
       </Layout.Section>
     </Layout>
   );
